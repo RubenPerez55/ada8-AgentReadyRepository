@@ -1,0 +1,16 @@
+{
+  "name": "tmdb-backend",
+  "version": "1.0.0",
+  "description": "API REST para el clon de TMDB",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test",
+    "install:all": "npm install"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}

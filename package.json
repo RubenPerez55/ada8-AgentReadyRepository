@@ -6,10 +6,12 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "node backend/server.js",
+    "test": "npm --prefix backend test",
     "backend": "npm --prefix backend start",
-    "install:all": "npm --prefix backend install"
+    "install:all": "npm --prefix backend install",
+    "postinstall": "npm --prefix backend install"
   },
-  "keywords": ["tmdb", "movies", "express", "api", "vanilla-js"],
+  "keywords": ["tmdb", "movies", "express", "api", "vanilla-js", "unit-tests"],
   "author": "Ruben Perez",
   "license": "MIT"
 }

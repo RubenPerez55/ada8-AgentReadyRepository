@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Movie Database (TMDB) — Clon</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23032541'/><text x='50' y='65' font-size='38' font-family='Arial, sans-serif' font-weight='bold' fill='%2301b4e4' text-anchor='middle'>TMDB</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Encabezado / Barra de Navegación Estilo TMDB -->
+  <header class="tmdb-header">
+    <div class="header-container">
+      <div class="nav-left">
+        <a href="#" class="logo" id="logo-btn">
+          <span class="logo-tmdb">TMDB</span>
+          <span class="logo-bar"></span>
+        </a>
+        <nav class="main-nav">
+          <ul>
+            <li class="nav-item has-dropdown">
+              <a href="#">Películas</a>
+              <div class="dropdown-menu">
+                <a href="#" data-filter-cat="popular">Popular</a>
+                <a href="#" data-filter-cat="trending">Tendencias</a>
+                <a href="#" data-filter-cat="upcoming">Próximos estrenos</a>
+                <a href="#" data-filter-cat="top_rated">Mejor valoradas</a>
+              </div>
+            </li>
+            <li class="nav-item"><a href="#">Series de TV</a></li>
+            <li class="nav-item"><a href="#">Personas</a></li>
+            <li class="nav-item"><a href="#">Más</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="nav-right">
+        <button class="nav-icon-btn" title="Añadir">+</button>
+        <div class="lang-pill" title="Idioma">ES</div>
+        <button class="nav-icon-btn" title="Notificaciones">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+          </svg>
+        </button>
+        <div class="user-avatar" title="Perfil de Usuario">RP</div>
+        <button class="search-toggle-btn" id="search-toggle" title="Buscar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Banner Principal / Hero -->
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Te damos la bienvenida.</h1>
+      <h2 class="hero-subtitle">Millones de películas, series de televisión y personas por descubrir. Explora ahora.</h2>
+      
+      <form class="hero-search-form" id="search-form">
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Buscar una película, serie, persona..." 
+          autocomplete="off"
+        />
+        <button type="submit" class="hero-search-btn">Buscar</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Barra de Filtros por Género -->
+  <section class="genre-filter-section">
+    <div class="container">
+      <div class="genre-chips-container" id="genre-chips">
+        <button class="genre-chip active" data-genre="all">Todos los géneros</button>
+        <!-- Inyectados dinámicamente -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Contenedor Principal de Secciones de Películas -->
+  <main class="main-content">
+    
+    <!-- Sección: Tendencias -->
+    <section class="movie-section" id="section-trending">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Tendencias</h2>
+          <div class="selector-toggle">
+            <button class="toggle-pill active" data-target="trending" data-period="day">Hoy</button>
+            <button class="toggle-pill" data-target="trending" data-period="week">Esta semana</button>
+          </div>
+        </div>
+
+        <div class="scroll-wrapper">
+          <button class="scroll-btn left" data-scroll="carousel-trending" aria-label="Anterior">‹</button>
+          <div class="movie-carousel" id="carousel-trending">
+            <!-- Películas dinámicas -->
+          </div>
+          <button class="scroll-btn right" data-scroll="carousel-trending" aria-label="Siguiente">›</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: Lo más popular -->
+    <section class="movie-section" id="section-popular">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Lo más popular</h2>
+          <div class="selector-toggle">
+            <button class="toggle-pill active" data-target="popular" data-type="streaming">En streaming</button>
+            <button class="toggle-pill" data-target="popular" data-type="theaters">En cines</button>
+          </div>
+        </div>
+
+        <div class="scroll-wrapper">
+          <button class="scroll-btn left" data-scroll="carousel-popular" aria-label="Anterior">‹</button>
+          <div class="movie-carousel" id="carousel-popular">
+            <!-- Películas dinámicas -->
+          </div>
+          <button class="scroll-btn right" data-scroll="carousel-popular" aria-label="Siguiente">›</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: Mejor valoradas -->
+    <section class="movie-section" id="section-top-rated">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Mejor valoradas</h2>
+          <span class="section-tag">Aclamadas por la crítica</span>
+        </div>
+
+        <div class="scroll-wrapper">
+          <button class="scroll-btn left" data-scroll="carousel-top-rated" aria-label="Anterior">‹</button>
+          <div class="movie-carousel" id="carousel-top-rated">
+            <!-- Películas dinámicas -->
+          </div>
+          <button class="scroll-btn right" data-scroll="carousel-top-rated" aria-label="Siguiente">›</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Resultados de Búsqueda / Cuadrícula Completa -->
+    <section class="search-results-section" id="search-results-section" style="display: none;">
+      <div class="container">
+        <div class="search-results-header">
+          <h2 id="search-results-title">Resultados de Búsqueda</h2>
+          <button class="close-search-btn" id="clear-search-btn">Limpiar filtro ✕</button>
+        </div>
+        <div class="movie-grid" id="movie-grid">
+          <!-- Resultados dinámicos -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal de Detalle de Película (Vista detallada estilo TMDB) -->
+  <div class="movie-modal" id="movie-modal" aria-hidden="true">
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal-card">
+      <button class="modal-close-btn" id="modal-close-btn" title="Cerrar">✕</button>
+      <div class="modal-body" id="modal-body">
+        <!-- Contenido inyectado dinámicamente -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Reproductor de Tráiler de YouTube -->
+  <div class="trailer-modal" id="trailer-modal" aria-hidden="true">
+    <div class="trailer-backdrop" id="trailer-backdrop"></div>
+    <div class="trailer-container">
+      <button class="trailer-close-btn" id="trailer-close-btn">✕ Cerrar tráiler</button>
+      <div class="video-responsive">
+        <iframe id="trailer-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pie de Página / Footer Estilo TMDB -->
+  <footer class="tmdb-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="footer-logo">TMDB</div>
+        <a href="https://github.com/RubenPerez55/Movies-ADA06" target="_blank" class="footer-join-btn">VER REPOSITORIO GITHUB</a>
+      </div>
+
+      <div class="footer-col">
+        <h3>LO BÁSICO</h3>
+        <ul>
+          <li><a href="#">Sobre TMDB</a></li>
+          <li><a href="#">Contacto</a></li>
+          <li><a href="#">Foros de soporte</a></li>
+          <li><a href="#">API</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>PARTICIPA</h3>
+        <ul>
+          <li><a href="#">Guía de aportaciones</a></li>
+          <li><a href="#">Añadir nueva película</a></li>
+          <li><a href="#">Añadir nuevo programa</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>COMUNIDAD</h3>
+        <ul>
+          <li><a href="#">Directrices</a></li>
+          <li><a href="#">Discusiones</a></li>
+          <li><a href="#">Tabla de clasificación</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>LEGAL</h3>
+        <ul>
+          <li><a href="#">Términos de uso</a></li>
+          <li><a href="#">Términos de API</a></li>
+          <li><a href="#">Política de privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>© 2026 Clon de The Movie Database (TMDB) para proyecto académico | Desarrollado por Rubén Pérez</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
