@@ -1,7 +1,7 @@
 # Readiness Improvement Report
 
 ## Experimental Setup
-- Same functional code for both runs: `ada08-baseline` (`1c9a77d`).
+- Same functional code for both runs: `ada08-baseline` (`941852b`).
 - BEFORE: baseline as-is (branch `ada08/before`). AFTER: baseline + readiness improvements only (`ada08-ready`, branch `ada08/after`).
 - Same task (`TASK_UNDER_TEST.md`, CR-01), same prompt, same agent/model (claude-opus-5-5), same tools and permissions, fresh context each run. The BEFORE implementation was never visible to the AFTER agent (separate worktree; `results/` committed after the AFTER run).
 

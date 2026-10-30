@@ -1,7 +1,7 @@
 # Repository Readiness Audit
 
 Repository: TMDB Clone (fork of `RubenPerez55/Movies-ADA06`)
-Baseline: tag `ada08-baseline` (commit `1c9a77d`)
+Baseline: tag `ada08-baseline` (commit `941852b`)
 Formula: `points = (score_0_to_5 / 5) x weight`
 
 ## BEFORE
@@ -28,7 +28,7 @@ Top 3 friction points:
 
 ## AFTER
 
-Audited on `ada08-ready` (`db19dac`): same baseline code + readiness improvements only.
+Audited on `ada08-ready` (`95d80cd`): same baseline code + readiness improvements only.
 
 | Dimension | Score 0-5 | Weighted | Evidence | Improvement |
 |---|---:|---:|---|---|

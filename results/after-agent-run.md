@@ -5,7 +5,7 @@ Agent: Claude (Cowork) — independent sub-agent, fresh context (no access to th
 Model: claude-opus-5-5 (same as BEFORE)
 Tools: shell (bash), file read/write (same as BEFORE)
 Permissions: read/write limited to a git worktree; no commit (same as BEFORE)
-Baseline commit/tag: `ada08-baseline` (`1c9a77d`) + readiness improvements only → `ada08-ready` (`db19dac`), branch `ada08/after`
+Baseline commit/tag: `ada08-baseline` (`941852b`) + readiness improvements only → `ada08-ready` (`95d80cd`), branch `ada08/after`
 Prompt: identical to BEFORE (same official prompt, same wrapper).
 Full diff: `results/after-agent-run.diff`
 

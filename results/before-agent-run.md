@@ -5,7 +5,7 @@ Agent: Claude (Cowork) — independent sub-agent, fresh context (no conversation
 Model: claude-opus-5-5
 Tools: shell (bash), file read/write
 Permissions: read/write limited to a git worktree of the baseline; no commit, no network beyond npm registry
-Baseline commit/tag: `ada08-baseline` (`1c9a77d`), branch `ada08/before`
+Baseline commit/tag: `ada08-baseline` (`941852b`), branch `ada08/before`
 Prompt: official ADA-08 prompt, verbatim. Wrapper added only to (a) fix the working directory and (b) ask for a RUN TRACE at the end (experiment logging, no repository hints).
 Full diff: `results/before-agent-run.diff`
 
