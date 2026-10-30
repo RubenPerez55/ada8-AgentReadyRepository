@@ -32,7 +32,7 @@ Status legend: **Implemented** = present in code; **Planned** = approved, not im
 - AC-05.2: Level is `high` (>= 70), `medium` (>= 50) or `low` (< 50).
 - AC-05.3: Null, negative or > 10 values are normalized (0 or clamped to 100).
 
-### FR-06 — Filter by minimum rating (Planned)
+### FR-06 — Filter by minimum rating (Implemented)
 `GET /api/movies` accepts an optional `min_rating` query parameter.
 - AC-06.1: `min_rating=N` returns only movies with `vote_average >= N`.
 - AC-06.2: `min_rating` combines with `category`, `genre` and `search` (logical AND).
