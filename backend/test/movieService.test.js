@@ -2,6 +2,7 @@ const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const {
   filterMovies,
+  parseMinRating,
   formatMovieScore,
   formatDateSpanish,
   calculateCatalogMetrics,
@@ -102,6 +103,78 @@ describe('Pruebas Unitarias: movieService', () => {
       assert.deepEqual(filterMovies(null), []);
       assert.deepEqual(filterMovies(undefined), []);
       assert.deepEqual(filterMovies('no-es-arreglo'), []);
+    });
+
+    it('AC-06.1 filtra por calificación mínima (vote_average >= minRating, inclusivo)', () => {
+      const results = filterMovies(mockMovies, { minRating: 7.6 });
+      assert.deepEqual(results.map(m => m.id), [1, 2]);
+
+      assert.equal(filterMovies(mockMovies, { minRating: 0 }).length, 4);
+      assert.equal(filterMovies(mockMovies, { minRating: 10 }).length, 0);
+    });
+
+    it('AC-06.2 combina minRating con categoría, género y búsqueda (AND)', () => {
+      assert.deepEqual(
+        filterMovies(mockMovies, { category: 'popular', minRating: 7 }).map(m => m.id),
+        [1, 2]
+      );
+      assert.deepEqual(
+        filterMovies(mockMovies, { genre: 'Drama', minRating: 5 }).map(m => m.id),
+        [3]
+      );
+      assert.deepEqual(
+        filterMovies(mockMovies, { search: 'Arthur', minRating: 6 }),
+        []
+      );
+      assert.deepEqual(
+        filterMovies(mockMovies, {
+          category: 'trending', genre: 'Aventura', search: 'Dune', minRating: 8
+        }).map(m => m.id),
+        [1]
+      );
+    });
+
+    it('AC-06.4 sin minRating el resultado es idéntico al de FR-01', () => {
+      assert.deepEqual(filterMovies(mockMovies, {}), mockMovies);
+      assert.deepEqual(
+        filterMovies(mockMovies, { category: 'popular', minRating: undefined }),
+        filterMovies(mockMovies, { category: 'popular' })
+      );
+    });
+
+    it('NFR-02 filtrar por minRating no muta el catálogo de entrada', () => {
+      const snapshot = JSON.parse(JSON.stringify(mockMovies));
+      filterMovies(mockMovies, { minRating: 8 });
+      assert.deepEqual(mockMovies, snapshot);
+    });
+  });
+
+  describe('parseMinRating()', () => {
+    it('AC-06.4 parámetro ausente es válido y sin efecto', () => {
+      assert.deepEqual(parseMinRating(undefined), { valid: true, value: null, error: null });
+    });
+
+    it('AC-06.1 acepta notación decimal simple dentro de 0–10', () => {
+      for (const [raw, expected] of [['0', 0], ['7', 7], ['7.5', 7.5], ['10', 10], ['10.0', 10]]) {
+        const parsed = parseMinRating(raw);
+        assert.equal(parsed.valid, true, `"${raw}" debería ser válido`);
+        assert.equal(parsed.value, expected);
+        assert.equal(parsed.error, null);
+      }
+    });
+
+    it('AC-06.3 rechaza valores no numéricos, fuera de rango o repetidos', () => {
+      const invalidInputs = [
+        'abc', '7a', '1e1', '0x5', 'Infinity', '', ' ', '-1', '10.1', '11', 'NaN',
+        ' 7', '+7', ['7', '8'], { a: '1' }, null
+      ];
+      for (const raw of invalidInputs) {
+        const parsed = parseMinRating(raw);
+        assert.equal(parsed.valid, false, `${JSON.stringify(raw)} debería ser inválido`);
+        assert.equal(parsed.value, null);
+        assert.equal(typeof parsed.error, 'string');
+        assert.ok(parsed.error.length > 0);
+      }
     });
   });
 
