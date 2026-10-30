@@ -1,5 +1,7 @@
 # 🎬 TMDB Clone — Movies ADA06
 
+> **Coding agents / new contributors:** start with [`AGENTS.md`](AGENTS.md) (sources of truth, commands, rules) and [`docs/REPO_MAP.md`](docs/REPO_MAP.md). Verify any change with `./scripts/verify_repo.sh`.
+
 Recreación simplificada de las vistas y catálogo de **The Movie Database (TMDB)** ([themoviedb.org](https://www.themoviedb.org/?language=es)) con arquitectura Frontend y Backend (REST API) y suite de pruebas unitarias.
 
 ---

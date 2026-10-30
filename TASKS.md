@@ -1,0 +1,13 @@
+# Tasks
+
+| Task | Requirement | Status | Code | Tests |
+|---|---|---|---|---|
+| T-01 List/filter movies | FR-01 | Done | `services/movieService.js#filterMovies`, `app.js` | movieService.test.js, api.test.js |
+| T-02 Movie detail | FR-02 | Done | `app.js` | api.test.js |
+| T-03 Categories/genres | FR-03 | Done | `app.js` | api.test.js |
+| T-04 Metrics | FR-04 | Done | `services/movieService.js#calculateCatalogMetrics` | movieService.test.js, api.test.js |
+| T-05 Score presentation | FR-05 | Done | `services/movieService.js#formatMovieScore` | movieService.test.js |
+| T-06 Minimum rating filter (CR-01) | FR-06 | To do | — | — |
+| T-07 Sort listings | FR-07 | To do | — | — |
+
+Update the Status/Code/Tests columns when a task is completed (see AGENTS.md Definition of Done).

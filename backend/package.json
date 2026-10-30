@@ -2,15 +2,21 @@
   "name": "tmdb-backend",
   "version": "1.0.0",
   "description": "API REST para el clon de TMDB",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
     "test": "node --test",
-    "install:all": "npm install"
+    "install:all": "npm install",
+    "lint": "eslint ."
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0"
   }
 }
