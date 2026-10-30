@@ -2,6 +2,7 @@ const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const {
   filterMovies,
+  parseMinRating,
   formatMovieScore,
   formatDateSpanish,
   calculateCatalogMetrics,
@@ -102,6 +103,69 @@ describe('Pruebas Unitarias: movieService', () => {
       assert.deepEqual(filterMovies(null), []);
       assert.deepEqual(filterMovies(undefined), []);
       assert.deepEqual(filterMovies('no-es-arreglo'), []);
+    });
+
+    it('FR-06: debe filtrar por calificación mínima inclusiva (AC-06.1)', () => {
+      const results = filterMovies(mockMovies, { minRating: 7.6 });
+      assert.deepEqual(results.map(m => m.id), [1, 2]);
+      assert.ok(results.every(m => m.vote_average >= 7.6));
+
+      assert.equal(filterMovies(mockMovies, { minRating: 0 }).length, 4);
+      assert.equal(filterMovies(mockMovies, { minRating: 10 }).length, 0);
+    });
+
+    it('FR-06: debe combinar minRating con categoría, género y búsqueda (AC-06.2)', () => {
+      assert.deepEqual(
+        filterMovies(mockMovies, { category: 'popular', minRating: 6 }).map(m => m.id),
+        [1, 2]
+      );
+      assert.deepEqual(
+        filterMovies(mockMovies, { genre: 'Drama', minRating: 5 }).map(m => m.id),
+        [3]
+      );
+      assert.equal(filterMovies(mockMovies, { search: 'Arthur', minRating: 6 }).length, 0);
+      assert.deepEqual(
+        filterMovies(mockMovies, {
+          category: 'popular', genre: 'Drama', search: 'Arthur', minRating: 5.6
+        }).map(m => m.id),
+        [3]
+      );
+    });
+
+    it('FR-06: sin minRating el resultado no cambia y no se muta el catálogo (AC-06.4, NFR-02)', () => {
+      const snapshot = JSON.parse(JSON.stringify(mockMovies));
+      assert.deepEqual(filterMovies(mockMovies, { minRating: undefined }), mockMovies);
+      filterMovies(mockMovies, { minRating: 8 });
+      assert.deepEqual(mockMovies, snapshot);
+    });
+  });
+
+  describe('parseMinRating()', () => {
+    it('debe aceptar ausencia del parámetro', () => {
+      assert.deepEqual(parseMinRating(undefined), { valid: true, value: undefined });
+    });
+
+    it('debe aceptar números entre 0 y 10 (inclusive)', () => {
+      assert.deepEqual(parseMinRating('0'), { valid: true, value: 0 });
+      assert.deepEqual(parseMinRating('7.5'), { valid: true, value: 7.5 });
+      assert.deepEqual(parseMinRating('10'), { valid: true, value: 10 });
+      assert.deepEqual(parseMinRating(' 8 '), { valid: true, value: 8 });
+    });
+
+    it('debe rechazar valores no numéricos (AC-06.3)', () => {
+      for (const v of ['', 'abc', '7a', 'NaN', 'Infinity', '0x5', '1e1', ['5', '6'], {}]) {
+        const r = parseMinRating(v);
+        assert.equal(r.valid, false, `debería rechazar ${JSON.stringify(v)}`);
+        assert.equal(typeof r.error, 'string');
+      }
+    });
+
+    it('debe rechazar valores fuera del rango 0-10 (AC-06.3)', () => {
+      for (const v of ['-0.1', '-1', '10.1', '11']) {
+        const r = parseMinRating(v);
+        assert.equal(r.valid, false, `debería rechazar ${v}`);
+        assert.ok(r.error.includes('0 y 10'));
+      }
     });
   });
 

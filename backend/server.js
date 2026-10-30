@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const {
   filterMovies,
+  parseMinRating,
   calculateCatalogMetrics
 } = require('./services/movieService');
 
@@ -30,8 +31,19 @@ try {
 
 // 1. Obtener todas las películas o filtrar por categoría, búsqueda o género
 app.get('/api/movies', (req, res) => {
-  const { category, search, genre } = req.query;
-  const results = filterMovies(movies, { category, search, genre });
+  const { category, search, genre, min_rating } = req.query;
+
+  const minRating = parseMinRating(min_rating);
+  if (!minRating.valid) {
+    return res.status(400).json({ error: minRating.error });
+  }
+
+  const results = filterMovies(movies, {
+    category,
+    search,
+    genre,
+    minRating: minRating.value
+  });
 
   res.json({
     total_results: results.length,
@@ -96,8 +108,8 @@ if (fs.existsSync(frontendPath)) {
   });
 }
 
-// Iniciar servidor
-app.listen(PORT, () => {
+// Iniciar servidor (solo cuando se ejecuta directamente, no al importarlo en pruebas)
+if (require.main === module) app.listen(PORT, () => {
   console.log(`===============================================`);
   console.log(`🎬 TMDB Clone Server corriendo exitosamente!`);
   console.log(`🌐 Acceso Web: http://localhost:${PORT}`);

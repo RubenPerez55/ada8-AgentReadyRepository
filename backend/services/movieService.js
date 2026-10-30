@@ -10,9 +10,10 @@
  * @param {string} [filters.category] - Categoría (trending, popular, top_rated, upcoming)
  * @param {string} [filters.genre] - Nombre del género
  * @param {string} [filters.search] - Término de búsqueda
+ * @param {number} [filters.minRating] - Calificación mínima (0 a 10, inclusiva) ya validada
  * @returns {Array} - Películas filtradas
  */
-function filterMovies(movies = [], { category, genre, search } = {}) {
+function filterMovies(movies = [], { category, genre, search, minRating } = {}) {
   if (!Array.isArray(movies)) return [];
 
   let result = [...movies];
@@ -48,7 +49,39 @@ function filterMovies(movies = [], { category, genre, search } = {}) {
     }
   }
 
+  if (typeof minRating === 'number' && Number.isFinite(minRating)) {
+    result = result.filter(m =>
+      typeof m.vote_average === 'number' && m.vote_average >= minRating
+    );
+  }
+
   return result;
+}
+
+/**
+ * Valida y convierte el parámetro de consulta `min_rating` (FR-06)
+ * @param {*} value - Valor crudo recibido en la query string
+ * @returns {{ valid: boolean, value?: number, error?: string }}
+ *   - Si el valor está ausente (undefined): { valid: true, value: undefined }
+ *   - Si es un número entre 0 y 10 (inclusive): { valid: true, value }
+ *   - En otro caso: { valid: false, error }
+ */
+function parseMinRating(value) {
+  if (value === undefined) {
+    return { valid: true, value: undefined };
+  }
+
+  const raw = typeof value === 'string' ? value.trim() : null;
+  if (raw === null || !/^-?\d+(\.\d+)?$/.test(raw)) {
+    return { valid: false, error: 'El parámetro "min_rating" debe ser un número' };
+  }
+
+  const num = Number(raw);
+  if (num < 0 || num > 10) {
+    return { valid: false, error: 'El parámetro "min_rating" debe estar entre 0 y 10' };
+  }
+
+  return { valid: true, value: num };
 }
 
 /**
@@ -182,6 +215,7 @@ function validateMovie(movie) {
 
 module.exports = {
   filterMovies,
+  parseMinRating,
   formatMovieScore,
   formatDateSpanish,
   calculateCatalogMetrics,
